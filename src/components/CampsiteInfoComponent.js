@@ -3,6 +3,10 @@ import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbIte
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
 
+const required = val => val && val.length;
+const maxLength = len => val => !val || (val.length <= len);
+const minLength = len => val => val && (val.length >= len);
+
 class CommentForm extends Component {
     constructor(props) {
         super(props);
@@ -58,7 +62,23 @@ class CommentForm extends Component {
                                     name="author"
                                     placeholder="Your Name"
                                     className="form-control"
+                                    validators={{
+                                        required,
+                                        minLength: minLength(2),
+                                        maxLength: maxLength(15)
+                                    }}
                                 />
+                                <Errors
+                                    model=".author"
+                                    show="touched"
+                                    component="div"
+                                    className="text-danger"
+                                    messages={{
+                                        required: 'Required',
+                                        minLength: 'Must be at least 2 characters',
+                                        maxLength: 'Must be 15 characters or less'
+                                    }}
+                            />
                             </div>
                             <div className="form-group">
                                 <Label htmlFor="comment" md={10}>Comment</Label>
